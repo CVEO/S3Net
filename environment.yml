@@ -1,0 +1,14 @@
+name: s3net
+channels:
+  - conda-forge
+dependencies:
+  - python=3.9.18
+  - gdal=3.7.0
+  - pip
+  - pip:
+    - torch==1.8.1+cu102
+    - torchvision==0.9.1+cu102
+    - torchaudio==0.8.1
+    - tqdm
+    - numpy
+    - torchmetrics
