@@ -78,9 +78,23 @@ Code is released for non-commercial and research purposes only. For commercial p
 If you find S3Net useful in your research, please consider giving a star ⭐ and citing:
 ```
 @article{yang2024s3net,
-  title={S3Net: Innovating Stereo Matching and Semantic Segmentation with a Single-Branch Semantic Stereo Network in Satellite Epipolar Imagery},
-  author={Yang, Qingyuan and Chen, Guanzhou and Tan, Xiaoliang and Wang, Tong and Wang, Jiaqi and Zhang, Xiaodong},
-  journal={arXiv preprint arXiv:2401.01643},
-  year={2024}
+    title={S3Net: Innovating Stereo Matching and Semantic Segmentation with a Single-Branch Semantic Stereo Network in Satellite Epipolar Imagery},
+    author={Yang, Qingyuan and Chen, Guanzhou and Tan, Xiaoliang and Wang, Tong and Wang, Jiaqi and Zhang, Xiaodong},
+    journal={arXiv preprint arXiv:2401.01643},
+    year={2024}
 }
+```
+
+or cite the old version S2Net:
+
+```
+@ARTICLE{liao2024s2net,
+    author={Liao, Puyun and Zhang, Xiaodong and Chen, Guanzhou and Wang, Tong and Li, Xianwei and Yang, Haobo and Zhou, Wenlin and He, Chanjuan and Wang, Qing},
+    journal={IEEE Transactions on Geoscience and Remote Sensing}, 
+    title={S2Net: A Multitask Learning Network for Semantic Stereo of Satellite Image Pairs}, 
+    year={2024},
+    volume={62},
+    number={},
+    pages={1-13},
+    doi={10.1109/TGRS.2023.3335997}}
 ```

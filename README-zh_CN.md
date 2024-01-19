@@ -78,9 +78,22 @@ S3Net
 如果你认为S3Net对你有帮助，请考虑给予一个星星⭐️并引用：
 ```
 @article{yang2024s3net,
-  title={S3Net: Innovating Stereo Matching and Semantic Segmentation with a Single-Branch Semantic Stereo Network in Satellite Epipolar Imagery},
-  author={Yang, Qingyuan and Chen, Guanzhou and Tan, Xiaoliang and Wang, Tong and Wang, Jiaqi and Zhang, Xiaodong},
-  journal={arXiv preprint arXiv:2401.01643},
-  year={2024}
+    title={S3Net: Innovating Stereo Matching and Semantic Segmentation with a Single-Branch Semantic Stereo Network in Satellite Epipolar Imagery},
+    author={Yang, Qingyuan and Chen, Guanzhou and Tan, Xiaoliang and Wang, Tong and Wang, Jiaqi and Zhang, Xiaodong},
+    journal={arXiv preprint arXiv:2401.01643},
+    year={2024}
 }
+```
+
+或者引用老版本S2Net:
+```
+@ARTICLE{liao2024s2net,
+    author={Liao, Puyun and Zhang, Xiaodong and Chen, Guanzhou and Wang, Tong and Li, Xianwei and Yang, Haobo and Zhou, Wenlin and He, Chanjuan and Wang, Qing},
+    journal={IEEE Transactions on Geoscience and Remote Sensing}, 
+    title={S2Net: A Multitask Learning Network for Semantic Stereo of Satellite Image Pairs}, 
+    year={2024},
+    volume={62},
+    number={},
+    pages={1-13},
+    doi={10.1109/TGRS.2023.3335997}}
 ```
