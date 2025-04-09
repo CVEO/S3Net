@@ -5,18 +5,19 @@ import torch.nn as nn
 import torch.nn.functional as F
 
 def convbn_3d(in_planes, out_planes, kernel_size, stride, pad):
-
-    return nn.Sequential(nn.Conv3d(in_planes, out_planes, kernel_size=kernel_size, padding=pad, stride=stride,bias=False),
-                         nn.BatchNorm3d(out_planes))
+    return nn.Sequential(
+        nn.Conv3d(in_planes, out_planes, kernel_size=kernel_size, padding=pad, stride=stride, bias=False),
+        nn.BatchNorm3d(out_planes)
+    )
 
 
 class disparityregression(nn.Module):
     def __init__(self, maxdisp):
         super(disparityregression, self).__init__()
-        self.disp = torch.Tensor(np.reshape(np.array(range(maxdisp)),[1, maxdisp,1,1])).cuda() - maxdisp/2
+        self.disp = torch.Tensor(np.reshape(np.array(range(maxdisp)), [1, maxdisp, 1, 1])).cuda() - maxdisp/2
 
     def forward(self, x):
-        out = torch.sum(x*self.disp.data,1, keepdim=False)
+        out = torch.sum(x*self.disp.data, 1, keepdim=False)
         return out
 
 
@@ -36,7 +37,6 @@ class CAModule(nn.Module):
     def forward(self, x):
         avgout = self.shared(self.avg_pool(x))
         maxout = self.shared(self.max_pool(x))
-
         return self.sigmoid(avgout + maxout)
 
 
@@ -67,13 +67,13 @@ class mmcs(nn.Module):
 
 
 class Block(nn.Module):
-    def __init__(self,in_places, places, stride=1,downsampling=False, expansion = 4):
-        super(Block,self).__init__()
+    def __init__(self, in_places, places, stride=1, downsampling=False, expansion=4):
+        super(Block, self).__init__()
         self.expansion = expansion
         self.downsampling = downsampling
 
         self.bottleneck = nn.Sequential(
-            nn.Conv3d(in_channels=in_places,out_channels=places,kernel_size=1,stride=1, bias=False),
+            nn.Conv3d(in_channels=in_places, out_channels=places, kernel_size=1, stride=1, bias=False),
             nn.BatchNorm3d(places),
             nn.ReLU(),
             nn.Conv3d(in_channels=places, out_channels=places, kernel_size=3, stride=stride, padding=1, bias=False),
@@ -94,13 +94,12 @@ class Block(nn.Module):
     def forward(self, x):
         residual = x
         out = self.bottleneck(x)
-
         out = self.mmcs(out)
  
         if self.downsampling:
             residual = self.downsample(x)
 
-        out = out+residual
+        out = out + residual
         out = self.relu(out)
         return out
 
@@ -330,47 +329,25 @@ class cls_extraction(nn.Module):
 
 
 class SSNet(nn.Module):
-    def __init__(self, maxdisp=64, num_classes=6):
+    def __init__(self, maxdisp=48, mindisp=-48, num_classes=6):
         super(SSNet, self).__init__()
         self.maxdisp = maxdisp
         self.num_classes = num_classes
 
         self.feature_extraction = feature_extraction()
-        # self.feature_extraction1 = feature_extraction()
-
         self.cls_extraction = cls_extraction()
-        # self.conv = nn.Sequential(nn.Conv2d(3,32,7,4,3),
-        #                           nn.BatchNorm2d(32),
-        #                           nn.ReLU(),
-        #                           nn.MaxPool2d(3, 1, 1))
         
-        
+    
         self.fuse = fuse_3D(64, 64, 64)
-
-
-        
         self.bn = nn.BatchNorm3d(64)
-
-
         self.Mul_fuse_3D1 = Mul_fuse_3D()
         self.Mul_fuse_3D2 = Mul_fuse_3D()
         self.Mul_fuse_3D3 = Mul_fuse_3D()
-        # self.Mul_fuse_3D1 = Mul_fuse_3D()
+
         self.block1 = Block(in_places=64, places=16)
         self.block2 = Block(in_places=64, places=16)
         self.block3 = Block(in_places=64, places=16)
 
-        # self.classif1 = nn.Sequential(convbn_3d(32, 32, 3, 1, 1),
-        #                         nn.ReLU(),
-        #                         nn.Conv3d(32, 1, kernel_size=3, padding=1, stride=1,bias=False))
-        
-        # self.classif2 = nn.Sequential(convbn_3d(32, 32, 3, 1, 1),
-        #                             nn.ReLU(),
-        #                             nn.Conv3d(32, 1, kernel_size=3, padding=1, stride=1,bias=False))
-        
-        # self.classif3 = nn.Sequential(convbn_3d(32, 32, 3, 1, 1),
-        #                             nn.ReLU(),
-        #                             nn.Conv3d(32, 1, kernel_size=3, padding=1, stride=1,bias=False))
 
         self.classif1 = nn.Sequential(convbn_3d(64, 64, 3, 1, 1),
                                 nn.ReLU())
@@ -401,7 +378,7 @@ class SSNet(nn.Module):
         self.weight2 = nn.Parameter(torch.Tensor([1]))
         self.weight3 = nn.Parameter(torch.Tensor([1]))
 
-        self.conv1 = nn.Conv2d(32,6,3,1,1)
+        self.conv1 = nn.Conv2d(32,self.num_classes,3,1,1)
 
         self.conv2 = nn.Sequential(nn.ConvTranspose2d(256,128,3,2,1,1,bias=False),
                                    nn.ReLU(),
@@ -519,6 +496,6 @@ class SSNet(nn.Module):
         cls3 = F.interpolate(cls3, [left.size()[2], left.size()[3]], align_corners=False, mode='bilinear')
         cls3 = self.fuse3(cls3)
         cls3 = self.conv1(cls3)
-
  
         return pred1, pred2, pred3, cls3
+

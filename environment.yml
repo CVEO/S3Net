@@ -3,7 +3,7 @@ channels:
   - conda-forge
 dependencies:
   - python=3.9.18
-  - gdal=3.7.0
+  - opencv=4.8.1
   - pip
   - pip:
     - torch==1.8.1+cu102
